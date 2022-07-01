@@ -14,6 +14,8 @@ import re
 
 from .utils import get_credentials
 from .gfiles import get_file_id, get_worksheet
+from google.colab import auth
+from google.auth import default
 
 try:
     input = raw_input
@@ -71,10 +73,9 @@ def upload(df, gfile="/New Spreadsheet", wks_name=None,
             >>> wks.title
             'Example worksheet'
     '''
-    # access credentials
-    credentials = get_credentials(credentials)
-    # auth for gspread
-    gc = gspread.authorize(credentials)
+    auth.authenticate_user()
+    creds, _ = default()
+    gc = gspread.authorize(creds)
 
     try:
         gc.open_by_key(gfile).__repr__()
